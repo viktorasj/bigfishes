@@ -1,0 +1,255 @@
+
+// the ~ allows you to reference things in node_modules
+@import "~bootstrap/scss/bootstrap";
+@import "./login_register.css";
+@import "./reservation.css";
+@import "./confirmation.css";
+@import "./header.css";
+@import "./my_reservations.css";
+
+body {
+  background-image: url('../images/background.jpg');
+}
+
+.calendar-wrapper {
+  width: auto;
+}
+
+.table_head_cell.Sat, .table_head_cell.Sun {
+  color: red;
+}
+
+th, td, tr :not(.blank_cell){
+  border: 1px solid black;
+  font-size: 14px;
+}
+
+table{
+  table-layout: fixed;
+  border-bottom: 2px solid black;
+  border-right: 2px solid black;
+}
+
+.sectors_cell {
+  border-left: 2px solid black!important;
+  border-right: 2px solid black!important;
+}
+
+.from_to_merged {
+  border: 2px solid black!important;
+}
+
+.table_head_first {
+  border: 2px solid black!important;
+}
+
+.table_head_cell {
+  border-top: 2px solid black!important;
+  border-bottom: 2px solid black!important;
+  background-color: whitesmoke;
+  width: 25px;
+}
+
+.sectors_cell {
+  padding-left: 4.9em;
+  padding-right: 4.9em;
+}
+
+.free {
+  background-color: #39AD59;
+  opacity: 0.9;
+}
+.busy-start_from_20 {
+  background-image: -webkit-linear-gradient(135deg, #FB873C 50%, #39AD59 50%);
+  opacity: 0.9;
+}
+.busy-start_from_8 {
+  background-image: -webkit-linear-gradient(135deg, #39AD59 50%, #FB873C 50%);
+  opacity: 0.9;
+}
+.busy {
+  background-color: #FB873C;
+  opacity: 0.9;
+}
+
+.sector_border{
+  filter:brightness(130%);
+}
+
+.custom_registration_form {
+  border-radius: 25px;
+  font-size: 14px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5em;
+  width: 40em;
+  height: auto;
+  padding: 3em;
+  background-color: lightgrey;
+  opacity: 0.85;
+
+}
+
+.highlight {
+  filter: brightness(135%);
+  //outline: 2px solid red;
+}
+
+.registration_button {
+  margin-left: 40%;
+}
+
+.Sat, .Sun {
+  filter: brightness(70%);
+}
+
+.highlight_cell{
+  filter: brightness(65%);
+}
+
+.calendar_legend{
+  background-color: ghostwhite;
+  opacity: 0.9;
+}
+
+.information_tab{
+  height: 23em;
+  background-color: ghostwhite;
+  opacity: 0.9;
+  overflow-y: auto;
+}
+
+.legend_meanings {
+  display: none!important;
+}
+
+.legends {
+  display: block!important;
+}
+
+.legend_parent {
+  display:table;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.legend_span{
+  width: 25px;
+  height: 25px;
+  border: 1px solid black;
+}
+
+.legend_alignment {
+  display:table-cell;
+  vertical-align:middle;
+}
+
+.pond_wrapper {
+  padding-left: 0px;
+}
+
+.submit_button {
+  padding: 10px;
+  display: block;
+  border-radius: 3px;
+  transition: all ease 0.4s;
+  height: auto;
+  -webkit-appearance: none;
+  color: white;
+  background: #15CD72;
+  border: 0;
+  font-weight: 600;
+  font-size: 17px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.submit_button-reservation {
+  width: 87%;
+}
+
+.submit_button-confirm {
+  width: 69%;
+}
+
+.submit_button:hover {
+  background: #0CB863;
+}
+
+.left_button {
+  padding: 10px;
+  margin-right: 1%;
+  display: block;
+  border-radius: 3px;
+  transition: all ease 0.4s;
+  height: auto;
+  -webkit-appearance: none;
+  color: white;
+  background: grey;
+  border: 0;
+  font-weight: 600;
+  font-size: 17px;
+  text-align: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.left_button-back {
+  width: 12%;
+}
+
+.left_button-cancel {
+  width: 30%;
+  background: #ff9999;
+}
+
+.left_button:hover {
+  background: #6D6D6D;
+}
+
+.left_button-cancel:hover {
+  background: #ff3333;
+}
+
+@media screen and (max-width: 600px) {
+  .pond_wrapper {
+    display: none;
+  }
+
+  .information_tab {
+    height: auto;
+  }
+
+  .calendar-wrapper {
+    width: 53em;
+  }
+
+  .sectors_cell {
+    padding-left: 2em;
+    padding-right: 2em;
+  }
+
+  .legend_span{
+    width: 20px;
+    height: 20px;
+    border: 1px solid black;
+  }
+
+  .legend_parent {
+    float: left;
+    margin-top: 10px;
+  }
+
+  .legend_meanings {
+    display: block!important;
+  }
+
+}
+
+
+
+

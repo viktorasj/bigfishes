@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Registration'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="row mt-5 mx-auto login-registration_form">
+        <div class="col-sm-5 mx-auto box box-success pl-5 pr-5">
+            {{ form_start(form) }}
+            <div class="row box-header with-border">
+                <div class="col-sm-12 text-center pt-2 pb-2">
+                    <div class="h4 box-title">{{ 'Registration'|trans }}</div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-sm-12">
+                    {{ form_row(form.name, {'attr': {'class': 'email_and_password_inputs', 'placeholder': 'Name', 'oninvalid':'this.setCustomValidity("Įveskite vardą")', 'oninput': 'this.setCustomValidity("")'}} ) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    {{ form_row(form.email, {'attr': {'class': 'email_and_password_inputs', 'placeholder': 'Email', 'oninvalid':'this.setCustomValidity("Įveskite el. paštą")', 'oninput': 'this.setCustomValidity("")', 'title': 'Trūksta @'}} ) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    {{ form_row(form.password, {'attr': {'class': 'email_and_password_inputs mb-5', 'placeholder':'Password', 'oninvalid':'this.setCustomValidity("Įveskite slaptažodį")', 'oninput': 'this.setCustomValidity("")'}} ) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <button class="submit_button" type="submit"> {{ 'Register'|trans }}</button>
+                </div>
+            </div>
+            <div class="row mt-3 mb-3">
+                <div class="col-sm-12">
+                    <p class="text-center">
+                        <a href="{{ path('app_login') }}">{{ 'I already have a membership'|trans }}</a>
+                    </p>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

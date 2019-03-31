@@ -1,0 +1,45 @@
+<h3>Sveiki, {{ name }}! Jūs rezervavote žvejybos laiką tvenkinyje <b>„DidelėsŽuvys.lt"</b></h3>
+
+<b>Jūsų rezervacija {{ reservation.id }}:</b>
+<br>Rezervuotas sektorius: <b>{{ reservation.sectorName }}</b>
+<br>Rezervuota nuo: <b>{{ reservation.dateFrom|date('Y-m-d H:i') }}</b>
+<br>Rezervuota iki: <b>{{ reservation.dateTo|date('Y-m-d H:i') }}</b>
+<br>Žvejų skaičius: <b>{{ reservation.fishersNumber }}</b>
+<br>Viso valandų: <b>{{ reservation.hours }}</b>
+{% if reservation.house %}
+    <br>Namelis: <b>užsakytas</b>
+{% endif %}
+<hr>
+{% if not is_granted ('ROLE_ABONENT') %}
+<div class="h4"><b>{{ 'Payment'|trans }}</b></div>
+<div class="h6"><b>{{ 'You have 2 days to make payment.'|trans }}</b></div>
+<div class="box-body">
+    <div class="h5 font-weight-bold text-center">
+        {{ 'Total payment'|trans }}: <b>{{ reservation.amount }} Eur</b>
+    </div>
+    <div>
+        <span class="font-weight-bold">{{ 'Our billing accounts'|trans }}:</span>
+        <br><span><b>AB SEB bank: LTXXX0XX0X0000XXXXXX</b></span>
+    </div>
+    <div>
+        <span class="font-weight-bold">{{ 'Payment order must be indicated'|trans }}:</span>
+        <br><span><b>{{ 'Reservation code'|trans }}: {{ reservation.id }},</b></span>
+        <br><span><b>{{ 'Your email'|trans }}: {{ app.user.email }}.</b></span>
+    </div>
+    <hr>
+{% endif %}
+    <p>
+        <span>{{ 'If you have any questions, please contact us'|trans }}:</span>
+        <br>
+        <span>email:</span> bigfisheslt@gmail.com
+        <br>
+        <span>Tel.</span> +370 666 77777
+    </p>
+
+    <br><br>Laukiame atvykstant!
+
+    <br><br><b><span>Didelės Žuvys Lt</span></b>
+    <br>
+        <span>http://bigfishes.projektai.nfqakademija.lt/</span>
+    <br>
+</div>

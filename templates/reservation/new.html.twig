@@ -1,0 +1,156 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Reservation'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="row reservation_form mt-3 mx-auto">
+        <div class="col-sm-6 mx-auto box box-success">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success mt-2">
+                    {{ message|trans }}
+                </div>
+            {% endfor %}
+            {% for message in app.flashes('warning') %}
+                <div class="alert alert-warning mt-2">
+                    {{ message|trans }}
+                </div>
+            {% endfor %}
+            <div class="row box-header with-border pb-0">
+                <div class="col-sm-12 text-center p-0 mb-2">
+                    {% if sector_name == "Wrong sector" %}
+                        <div class="h6 wrong_sector_title" style="color: red">{{ sector_name|trans }}</div>
+                    {% else %}
+                        <div class="reservation_from_title">{{ sector_name|replace({'Sektorius': 'Sektoriaus',
+                                'Pirmas': '1',
+                                'Antras': '2',
+                                'Trečias': '3',
+                                'Ketvirtas': '4',
+                                'Penktas': '5',
+                                'Šeštas': '6',
+                                'Septintas': '7'}) }} {{ 'reservation from'|trans }} {{ data.dateFrom|date('Y-m-d') }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            {{ form_start(form) }}
+            <div class="row no-gutters mt-2 mb-2">
+                <div class="col-sm-4">
+                    <span class=""> {{ 'Reservation name'|trans }}:</span>
+                </div>
+                <div class="col-sm-8">
+                    <span> {{ form_widget(form.name, {'attr': {'class': 'reservation_reservation-name'}} ) }}</span>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-6 from_block">
+                    <div class="" style="height: 8em; border: 1px solid #D2D8E1">
+                        <div class="reservation_from">
+                            <div class="reservation_till text-center mb-2">
+                                <span class="h6">{{ 'From'|trans }}: {{ data.dateFrom|date('Y-m-d') }}</span>
+                            </div>
+                            {{ form_errors(form.timeFrom) }}
+                            {% block form_widget_timeFrom %}
+                                {% if (data.dateFrom|date('l') is same as('Saturday')) or (data.dateFrom|date('l') is same as("Sunday")) %}
+                                    <div id="reservation_timeFrom">
+                                        <div class="radio-input">
+                                            <input class="form-check-input" type="radio" id="reservation_timeFrom_1" name="reservation[timeFrom]" required="required"  value="20" checked="checked">20:00
+                                            <span> vakaro</span>
+                                        </div>
+                                    </div>
+                                    {% do form.timeFrom.setRendered() %}
+                                {% else %}
+                                    <div id="reservation_timeFrom">
+                                        <div class="radio-input">
+                                            <input class="form-check-input" type="radio" id="reservation_timeFrom_0" name="reservation[timeFrom]" required="required" value="08" checked="checked">8:00
+                                            <span> ryto</span>
+                                        </div>
+                                        <div class="radio-input">
+                                            <input class="form-check-input" type="radio" id="reservation_timeFrom_1" name="reservation[timeFrom]" required="required"  value="20">20:00
+                                            <span> vakaro</span>
+                                        </div>
+                                    </div>
+                                    {% do form.timeFrom.setRendered() %}
+                                {% endif %}
+                            {% endblock form_widget_timeFrom %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 to_block">
+                    <div class="pt-2" style="height: 8em; border: 1px solid #D2D8E1">
+                        <div class="reservation_till text-center mb-2">
+                            <span class="h6 inline-block">{{ 'Till'|trans }}:</span>
+                            {{ form_widget(form.dateTo,{'attr': {'class':'datepicker_view inline-block', 'autocomplete':'off'}} ) }}
+                        </div>
+                        <div>
+                            {{ form_errors(form.timeTo) }}
+                            {% block form_widget_timeTo %}
+                            <div id="reservation_timeTo">
+                                <div class="radio-input">
+                                    <input class="form-check-input" type="radio" id="reservation_timeTo_0" name="reservation[timeTo]" required="required" value="08">08:00
+                                    <span> ryto</span>
+                                </div>
+                                <div class="radio-input">
+                                    <input class="form-check-input" type="radio" id="reservation_timeTo_1" name="reservation[timeTo]" required="required" value="20" checked="checked">20:00
+                                    <span> vakaro</span>
+                                </div>
+                            </div>
+                            {% do form.timeTo.setRendered() %}
+                            {#{{ form_widget(form.timeTo) }}#}
+                            {% endblock form_widget_timeTo %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    {{ form_widget(form) }}
+                </div>
+            </div>
+            <div class="row p-3">
+                <a class="left_button left_button-back" style="color: white" href="{{ path('home') }}">{{ 'Back'|trans }}</a>
+                <button class="submit_button submit_button-reservation" type="submit">{{ 'Reserve'|trans }}</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('build/js/reservations.js') }}" defer></script>
+    <script defer>
+        $.fn.datepicker.dates['lt'] = {
+            days: [],
+            daysShort: [],
+            daysMin: ["Se", "Pi", "An", "Tr", "Ke", "Pe", "Še"],
+            months: ["Sausis", "Vasaris", "Kovas", "Balandis", "Gegužė", "Birželis", "Liepa", "Rugpjūtis", "Rugsėjis", "Spalis", "Lapkritis", "Gruodis"],
+            monthsShort: [],
+            today: "Šiandien",
+            clear: "Clear",
+            format: "yyyy-mm-dd",
+            titleFormat: "MM yyyy",
+        };
+        let min_date = new Date('{{ default_date_to|date('Y-m-d') }}');
+        let max_date = new Date('{{ availableDateTo|date('Y-m-d') }}');
+        let date_with_border = new Date('{{ default_date_to|date_modify("+1 day")|date('Y-m-d') }}');
+        let time_from_BUSY = '{{ availableDateTo|date('H') }}';
+        let date_from_BUSY = '{{ availableDateTo|date('Y-m-d') }}';
+        let is_date_available_from_8 = '{{ isDateAvailableFrom8 }}';
+        if (date_with_border.getTime() == max_date.getTime()) {
+            date_with_border = new Date('{{ default_date_to|date('Y-m-d') }}');
+        }
+        $('.datepicker_view').datepicker({
+            autoclose: true,
+            // weekStart: 1,
+            // format: 'yyyy-mm-dd',
+            startDate: min_date,
+            endDate: max_date,
+            language: 'lt',
+            daysOfWeekHighlighted: '06'
+        });
+        $(".datepicker_view").datepicker('setDate', date_with_border);
+        $(".datepicker_view").datepicker('update');
+    </script>
+
+{% endblock %}

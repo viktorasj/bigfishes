@@ -1,0 +1,34 @@
+.my_reservations_th-0 {
+    width: 2em;
+}
+.my_reservations_th-1 {
+    width: 12em;
+}
+.my_reservations_th-2 {
+    width: 8em;
+}
+.my_reservations_th-3 {
+    width: 8em;
+}
+.my_reservations_th-4 {
+    width: 8em;
+}
+.my_reservations_th-5 {
+    width: 4em;
+}
+.my_reservations_th-6 {
+    width: 4em;
+}
+.my_reservations_th-7 {
+    width: 4em;
+}
+.my_reservations_th-8 {
+    width: 8em;
+}
+
+
+@media screen and (max-width: 600px) {
+    .ur_table_wrapper {
+        overflow: auto;
+    }
+}

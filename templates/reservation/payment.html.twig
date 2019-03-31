@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row mt-3 mx-auto confirmation_form">
+        <div class="col-sm-6 mx-auto box box-success">
+            <div class="row box-header with-border pb-0">
+                <div class="col-sm-12 pl-1">
+                    <div class="h4">{{ 'Payment'|trans }}</div>
+                    <div class="h6">{{ 'You have 2 days to make payment.'|trans }}</div>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="h5 font-weight-bold text-center">{{ 'Total payment'|trans }}: {{ reservation.amount }}
+                    &#8364
+                </div>
+                <hr>
+                <div>
+                    <span class="font-weight-bold">{{ 'Our billing accounts'|trans }}:</span>
+                    <span>AB SEB bank: LTXXX0XX0X0000XXXXXX</span>
+                </div>
+                <div>
+                    <span class="font-weight-bold">{{ 'Payment order must be indicated'|trans }}:</span>
+                    <span>"{{ 'Reservation code'|trans }}: {{ reservation.id }}, {{ userEmail }}."</span>
+                </div>
+                <hr>
+                <p>
+                    <span>{{ 'If you have any questions, please contact us'|trans }}:</span>
+                    <br>
+                    <span>email:</span> bigfisheslt@gmail.com
+                    <br>
+                    <span>Tel.</span> +370 666 77777
+                </p>
+                <form class="row pl-3 pr-3" method="post"
+                      action="{{ path('confirm_reservation') }}">
+                    <input type="hidden" name="id" value="{{ reservation.id }}">
+                    <button type="submit"
+                            class="submit_button mb-2">{{ 'Complete the reservation'|trans }}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
