@@ -36,7 +36,7 @@ class ReservationType extends AbstractType
                 'data' => $this->security->getUser()->getName()
             ))
             ->add('timeFrom', ChoiceType::class, array(
-                'choices' => array('08:00' => '08', '20:00' => '20'),
+                'choices' => array('07:00' => '07', '19:00' => '19'),
                 'expanded' => true,
                 'data' => '08',
             ))
@@ -50,9 +50,9 @@ class ReservationType extends AbstractType
                 'html5' => false
             ])
             ->add('timeTo', ChoiceType::class, array(
-                'choices' => array('08:00' => '08', '20:00' => '20'),
+                'choices' => array('07:00' => '07', '19:00' => '19'),
                 'expanded' => true,
-                'data' => '20',
+                'data' => '19',
             ))
             ->add('fishersNumber', ChoiceType::class, array(
                 'choices' => array(1 => 1, 2 => 2,),

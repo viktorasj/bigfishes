@@ -90,7 +90,7 @@ class ReservationRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
 
         $date = new \DateTime('+30days');
-        $maxDateTo = $date->setTime('08', '00');
+        $maxDateTo = $date->setTime('07', '00');
 
         return $data ? $data->getDateFrom() : $maxDateTo;
     }
@@ -101,7 +101,7 @@ class ReservationRepository extends ServiceEntityRepository
      * @return bool
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isDateAvailableFrom8(string $sector, \DateTime $selectedDate): bool
+    public function isDateAvailableFrom7(string $sector, \DateTime $selectedDate): bool
     {
         $data = $this->createQueryBuilder('r')
             ->andWhere('r.sectorName = :sector')
@@ -115,7 +115,7 @@ class ReservationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
 
-        if ($data && $data->getDateFrom()->format('H') === "08"){
+        if ($data && $data->getDateFrom()->format('H') === "07"){
             return false; // because asking if date available from 8, answer is NO
         } else {
             return true;

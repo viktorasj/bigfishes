@@ -55,9 +55,9 @@ class ReservationController extends AbstractController
             ->findAvailableDateTo($sectorNumber, $dateFrom);
 
 
-        $isDateAvailableFrom8 = $this->getDoctrine()
+        $isDateAvailableFrom7 = $this->getDoctrine()
             ->getRepository(Reservation::class)
-            ->isDateAvailableFrom8($sectorNumber, $dateFrom);
+            ->isDateAvailableFrom7($sectorNumber, $dateFrom);
 
         $form = $this->createForm(ReservationType::class, $reservation);
         $form->handleRequest($request);
@@ -83,8 +83,8 @@ class ReservationController extends AbstractController
                 if ($isAvailableDateTo) {
                     if ($isSectorValid) {
                         $reservation->setSectorName($sectorNumber);
-                        if (!$reservationService->isTimeFrom08($dateFrom) &&
-                            !$reservationService->isTimeFrom08($dateTo)) {
+                        if (!$reservationService->isTimeFrom07($dateFrom) &&
+                            !$reservationService->isTimeFrom07($dateTo)) {
                             $totalHours = $reservationService->hoursTotal($dateFrom, $dateTo);
                             $fishersNumber = $reservation->getFishersNumber();
                             $fishingPrice = $reservationService->fishingPriceCalculation($fishersNumber, $totalHours);
@@ -112,7 +112,7 @@ class ReservationController extends AbstractController
                         } else {
                             $this->addFlash(
                                 'warning',
-                                'The Reservation time in weekend available from 20:00 to 20:00'
+                                'The Reservation time in weekend available from 19:00 to 19:00'
                             );
                         }
                     } else {
@@ -132,7 +132,7 @@ class ReservationController extends AbstractController
             'form' => $form->createView(),
             'data' => $form->getData(),
             'availableDateTo' => $availableDateTo,
-            'isDateAvailableFrom8' => $isDateAvailableFrom8,
+            'isDateAvailableFrom7' => $isDateAvailableFrom7,
             'sector_name' => $reservationService->sectorKeyToName($sector),
             'default_date_to' => $default_date_to
         ]);

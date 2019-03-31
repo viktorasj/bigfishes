@@ -3,8 +3,8 @@ import {isWithinRange, isBefore, addDays, format, getMonth} from 'date-fns';
 const jj = JSON.parse(json_content.replace(/&quot;/g,'"'));
 
 
-const STATUS_BUSY_FIRST = "busy-start_from_20";
-const STATUS_BUSY_SECOND = "busy-start_from_8";
+const STATUS_BUSY_FIRST = "busy-start_from_19";
+const STATUS_BUSY_SECOND = "busy-start_from_7";
 const STATUS_BUSY = "busy";
 const STATUS_FREE = "free";
 
@@ -51,40 +51,40 @@ for (const sector in jj) {
         for (const reservationId in jj[sector].reservation_dates) {
             const reservation = jj[sector].reservation_dates[reservationId];
             const isInRange = isWithinRange(dates[i].date, reservation.dateFrom, reservation.dateTo);
-            if (isInRange && dates[i].date === reservation.dateFrom && reservation.timeFrom === '08' && Object.keys(jj[sector].reservation_dates).find(
+            if (isInRange && dates[i].date === reservation.dateFrom && reservation.timeFrom === '07' && Object.keys(jj[sector].reservation_dates).find(
                 function (v) {
-                    if (isWithinRange(dates[i].date, jj[sector].reservation_dates[v].dateFrom, jj[sector].reservation_dates[v].dateTo) && jj[sector].reservation_dates[v].dateFrom === reservation.dateFrom && jj[sector].reservation_dates[v].timeFrom === "20") {
+                    if (isWithinRange(dates[i].date, jj[sector].reservation_dates[v].dateFrom, jj[sector].reservation_dates[v].dateTo) && jj[sector].reservation_dates[v].dateFrom === reservation.dateFrom && jj[sector].reservation_dates[v].timeFrom === "19") {
                         return true;
                     }
                 })) {
                 dayInfo = STATUS_BUSY;
                 title = generateTitle(reservation);
-            } else if (isInRange && dates[i].date === reservation.dateFrom && reservation.dateFrom === reservation.dateTo && reservation.timeFrom === '08') {
+            } else if (isInRange && dates[i].date === reservation.dateFrom && reservation.dateFrom === reservation.dateTo && reservation.timeFrom === '07') {
                 dayInfo = STATUS_BUSY_SECOND;
                 title = generateTitle(reservation);
-            } else if (isInRange && dates[i].date === reservation.dateFrom && reservation.timeFrom === '08') {
+            } else if (isInRange && dates[i].date === reservation.dateFrom && reservation.timeFrom === '07') {
                 dayInfo = STATUS_BUSY;
                 title = generateTitle(reservation);
-            } else if (isInRange && dates[i].date === reservation.dateFrom && reservation.timeFrom === '20' && Object.keys(jj[sector].reservation_dates).find(
+            } else if (isInRange && dates[i].date === reservation.dateFrom && reservation.timeFrom === '19' && Object.keys(jj[sector].reservation_dates).find(
                 function (v) {
-                    if (isWithinRange(dates[i].date, jj[sector].reservation_dates[v].dateFrom, jj[sector].reservation_dates[v].dateTo) && jj[sector].reservation_dates[v].dateTo === reservation.dateFrom && jj[sector].reservation_dates[v].timeTo === "20") {
+                    if (isWithinRange(dates[i].date, jj[sector].reservation_dates[v].dateFrom, jj[sector].reservation_dates[v].dateTo) && jj[sector].reservation_dates[v].dateTo === reservation.dateFrom && jj[sector].reservation_dates[v].timeTo === "19") {
                         return true;
                     }
                 })) {
                 dayInfo = STATUS_BUSY;
                 title = generateTitle(reservation);
-            } else if (isInRange && dates[i].date === reservation.dateFrom && reservation.timeFrom === '20') {
+            } else if (isInRange && dates[i].date === reservation.dateFrom && reservation.timeFrom === '19') {
                 dayInfo = STATUS_BUSY_FIRST;
                 title = generateTitle(reservation);
-            } else if (isInRange && dates[i].date === reservation.dateTo && reservation.timeTo === '20' && Object.keys(jj[sector].reservation_dates).find(
+            } else if (isInRange && dates[i].date === reservation.dateTo && reservation.timeTo === '19' && Object.keys(jj[sector].reservation_dates).find(
                 function (v) {
-                    if (isWithinRange(dates[i].date, jj[sector].reservation_dates[v].dateFrom, jj[sector].reservation_dates[v].dateTo) && jj[sector].reservation_dates[v].dateFrom === reservation.dateTo && jj[sector].reservation_dates[v].timeFrom === "20") {
+                    if (isWithinRange(dates[i].date, jj[sector].reservation_dates[v].dateFrom, jj[sector].reservation_dates[v].dateTo) && jj[sector].reservation_dates[v].dateFrom === reservation.dateTo && jj[sector].reservation_dates[v].timeFrom === "19") {
                         return true;
                     }
                 })) {
                 dayInfo = STATUS_BUSY;
                 title = generateTitle(reservation);
-            } else if (isInRange && dates[i].date === reservation.dateTo && reservation.timeTo === '20') {
+            } else if (isInRange && dates[i].date === reservation.dateTo && reservation.timeTo === '19') {
                 dayInfo = STATUS_BUSY_SECOND;
                 title = generateTitle(reservation);
             } else if (isInRange && dates[i].date !== reservation.dateFrom && dates[i].date !== reservation.dateTo) {
@@ -114,9 +114,9 @@ function generateTitle (obj){
 
 
 $('.busy').removeAttr("onclick");
-$('.busy-start_from_20.Sat').removeAttr("onclick");
+$('.busy-start_from_19.Sat').removeAttr("onclick");
 
-$('.sectors_day_cell').not('.busy').not('.busy-start_from_20.Sat').css('cursor', 'pointer');
+$('.sectors_day_cell').not('.busy').not('.busy-start_from_19.Sat').css('cursor', 'pointer');
 
 $('.sectors_day_cell').not('.busy').hover(function () {
     $(this).toggleClass('highlight_cell')

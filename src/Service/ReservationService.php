@@ -48,9 +48,9 @@ class ReservationService
         return $priceFirst + $priceSecond;
     }
 
-    public function isTimeFrom08(\DateTime $date): bool
+    public function isTimeFrom07(\DateTime $date): bool
     {
-        return ($this->isWeekendTime($date) && ($date->format('H') === '08'));
+        return ($this->isWeekendTime($date) && ($date->format('H') === '07'));
     }
 
     public function isWeekendTime(\DateTime $date): bool
