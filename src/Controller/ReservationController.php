@@ -57,8 +57,7 @@ class ReservationController extends AbstractController
 
         $isDateAvailableFrom8 = $this->getDoctrine()
             ->getRepository(Reservation::class)
-            ->isAvailableDateFrom($sectorNumber, $dateFrom);
-        dump($isDateAvailableFrom8);
+            ->isDateAvailableFrom8($sectorNumber, $dateFrom);
 
         $form = $this->createForm(ReservationType::class, $reservation);
         $form->handleRequest($request);

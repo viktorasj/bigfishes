@@ -95,6 +95,39 @@ class ReservationRepository extends ServiceEntityRepository
         return $data ? $data->getDateFrom() : $maxDateTo;
     }
 
+    /**
+     * @param string $sector
+     * @param \DateTime $dateFrom
+     * @return bool
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function isDateAvailableFrom8(string $sector, \DateTime $selectedDate): bool
+    {
+        $data = $this->createQueryBuilder('r')
+            ->andWhere('r.sectorName = :sector')
+            ->andWhere('r.dateTo > :dateFrom')
+            ->andWhere('r.status = :active')
+            ->setParameter('sector', $sector)
+            ->setParameter('active', true)
+            ->setParameter('dateFrom', $selectedDate)
+            ->orderBy('r.dateFrom', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if ($data && $data->getDateFrom()->format('H') === "08"){
+            return false; // because asking if date available from 8, answer is NO
+        } else {
+            return true;
+        }
+    }
+
+
+    /**
+     * @param $value
+     * @return Reservation|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function findOneByIdField($value): ?Reservation
     {
         return $this->createQueryBuilder('r')
