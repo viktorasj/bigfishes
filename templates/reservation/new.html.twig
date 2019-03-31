@@ -53,7 +53,7 @@
                                 {% if (data.dateFrom|date('l') is same as('Saturday')) or (data.dateFrom|date('l') is same as("Sunday")) %}
                                     <div id="reservation_timeFrom">
                                         <div class="radio-input">
-                                            <input class="form-check-input" type="radio" id="reservation_timeFrom_1" name="reservation[timeFrom]" required="required"  value="19" checked="checked">19:00
+                                            <input class="form-check-input" type="radio" id="reservation_timeFrom_1" name="reservation[timeFrom]" required="required" value="19" checked="checked">19:00
                                             <span> vakaro</span>
                                         </div>
                                     </div>
@@ -65,7 +65,7 @@
                                             <span> ryto</span>
                                         </div>
                                         <div class="radio-input">
-                                            <input class="form-check-input" type="radio" id="reservation_timeFrom_1" name="reservation[timeFrom]" required="required"  value="19">19:00
+                                            <input class="form-check-input" type="radio" id="reservation_timeFrom_1" name="reservation[timeFrom]" required="required" value="19">19:00
                                             <span> vakaro</span>
                                         </div>
                                     </div>
@@ -131,6 +131,8 @@
             format: "yyyy-mm-dd",
             titleFormat: "MM yyyy",
         };
+
+
         let min_date = new Date('{{ default_date_to|date('Y-m-d') }}');
         let max_date = new Date('{{ availableDateTo|date('Y-m-d') }}');
         let date_with_border = new Date('{{ default_date_to|date_modify("+1 day")|date('Y-m-d') }}');
@@ -140,12 +142,14 @@
         if (date_with_border.getTime() == max_date.getTime()) {
             date_with_border = new Date('{{ default_date_to|date('Y-m-d') }}');
         }
+        console.log(is_date_available_from_7);
+        console.log(min_date);
+        console.log(max_date);
+        console.log(date_with_border);
         $('.datepicker_view').datepicker({
             autoclose: true,
-            // weekStart: 1,
-            // format: 'yyyy-mm-dd',
-            startDate: min_date,
-            endDate: max_date,
+            // startDate: min_date,
+            // endDate: max_date,
             language: 'lt',
             daysOfWeekHighlighted: '06'
         });

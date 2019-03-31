@@ -38,7 +38,7 @@ class ReservationType extends AbstractType
             ->add('timeFrom', ChoiceType::class, array(
                 'choices' => array('07:00' => '07', '19:00' => '19'),
                 'expanded' => true,
-                'data' => '08',
+                'data' => '07',
             ))
             ->add('dateTo', DateType::class, [
                 'required' => true,

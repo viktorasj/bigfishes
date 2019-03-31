@@ -7,6 +7,7 @@ use App\Form\ReservationType;
 use App\Service\ReservationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -19,9 +20,13 @@ class ReservationController extends AbstractController
     const SECTOR_NUMBER = "Trečias Sektorius";
 
     /**
+     * @param Request $request
+     * @param ReservationService $reservationService
      * @Route("/reservation", name="new_reservation")
      * @IsGranted("ROLE_USER")
      * @throws
+     *
+     * @return Response
      */
     public function new(Request $request, ReservationService $reservationService)
     {
@@ -54,7 +59,6 @@ class ReservationController extends AbstractController
             ->getRepository(Reservation::class)
             ->findAvailableDateTo($sectorNumber, $dateFrom);
 
-
         $isDateAvailableFrom7 = $this->getDoctrine()
             ->getRepository(Reservation::class)
             ->isDateAvailableFrom7($sectorNumber, $dateFrom);
@@ -69,11 +73,9 @@ class ReservationController extends AbstractController
             $dateTo = $form->getData()->getDateTo()->setTime($form->get('timeTo')->getData(), '00');
             $default_date_to = $dateTo;
 
-
             $isAvailableDateFrom = $this->getDoctrine()
                 ->getRepository(Reservation::class)
                 ->isAvailableDateFrom($sectorNumber, $dateFrom);
-
 
             if ($isAvailableDateFrom) {
                 $isAvailableDateTo = $this->getDoctrine()

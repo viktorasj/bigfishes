@@ -35,12 +35,23 @@ class ReservationRepository extends ServiceEntityRepository
         return $reservations;
     }
 
+    /**
+     * @param string $sector
+     * @param \DateTime $dateFrom
+     * @param \DateTime $dateTo
+     * @return bool
+     */
     public function isAvailableReservationRange(string $sector, \DateTime $dateFrom, \DateTime $dateTo): bool
     {
         return ($this->isAvailableDateFrom($sector, $dateFrom)) &&
             ($this->isAvailableDateTo($sector, $dateTo, $dateFrom));
     }
 
+    /**
+     * @param string $sector
+     * @param \DateTime $dateFrom
+     * @return bool
+     */
     public function isAvailableDateFrom(string $sector, \DateTime $dateFrom): bool
     {
         foreach ($this->findBusyFields($sector) as $range) {
@@ -67,6 +78,9 @@ class ReservationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @throws
+     */
     public function isAvailableDateTo(string $sector, \DateTime $dateTo, \DateTime $dateFrom): bool
     {
         return (($dateFrom < $dateTo) && ($dateTo <= $this->findAvailableDateTo($sector, $dateFrom)));
@@ -97,31 +111,27 @@ class ReservationRepository extends ServiceEntityRepository
 
     /**
      * @param string $sector
-     * @param \DateTime $dateFrom
-     * @return bool
+     * @param \DateTime $selectedDate
+     * @return bool|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function isDateAvailableFrom7(string $sector, \DateTime $selectedDate): bool
     {
+        $selectedDate->setTime('07', '00');
         $data = $this->createQueryBuilder('r')
             ->andWhere('r.sectorName = :sector')
-            ->andWhere('r.dateTo > :dateFrom')
+            ->andWhere('r.dateFrom = :selectedDate')
             ->andWhere('r.status = :active')
             ->setParameter('sector', $sector)
             ->setParameter('active', true)
-            ->setParameter('dateFrom', $selectedDate)
+            ->setParameter('selectedDate', $selectedDate)
             ->orderBy('r.dateFrom', 'ASC')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
 
-        if ($data && $data->getDateFrom()->format('H') === "07"){
-            return false; // because asking if date available from 8, answer is NO
-        } else {
-            return true;
-        }
+        return $data ? false : true;
     }
-
 
     /**
      * @param $value
@@ -142,7 +152,9 @@ class ReservationRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.user = :val')
+            ->andWhere('r.status = :active')
             ->setParameter('val', $userId)
+            ->setParameter('active', true)
             ->orderBy('r.dateFrom', 'ASC')
             ->getQuery()
             ->getResult();
