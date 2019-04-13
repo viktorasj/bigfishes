@@ -51,8 +51,9 @@ Reserved from: Rezervuojama nuo
 Reserved to: Rezervuojama iki
 Reservation date confirmed!: Rezervacijos data patvirtinta!
 The Reservation time in weekend available from 19:00 to 19:00: Šeštadieniais ir sekmadieniais rezervuoti galima tik nuo 19:00 iki 19:00
-Confirm rezervation and make payment!: Patvirtinti rezervaciją ir Apmokėti
+Confirm reservation: Patvirtinti rezervaciją
 Sector does not exist: Toks sektorius neegzistuoja
+Continue reservation: Tęsti rezervaciją
 ##admin panel
 List of Reservations: Sąrašas Rezervacijų
 Reservations: Rezervacijos

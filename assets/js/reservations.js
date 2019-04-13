@@ -5,7 +5,7 @@ if ($(window).width() < 600) {
     $('.left_button-back').text('').append('<i class="fa fa-angle-double-left" style="color: white; font-size: 1em"></i>');
 }
 
-if(!is_date_available_from_7) {
+if(!is_date_available_from_8) {
     $('#reservation_timeFrom_0').attr({'disabled': true, 'checked': false});
     // $('#reservation_timeFrom_0').attr('checked', '');
     $('#reservation_timeFrom_1').attr('checked', true);

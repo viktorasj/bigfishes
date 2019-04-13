@@ -68,7 +68,7 @@ class SecurityController extends AbstractController
             $this->addFlash('success', $this->translator->trans('Registration successful!'));
 
             $message = (new \Swift_Message($this->translator->trans('Registration successful!')))
-                ->setFrom('bigfisheslt@gmail.com')
+                ->setFrom('bigfishes2019@gmail.com')
                 ->setTo($user->getEmail())
                 ->setBody(
                     $this->renderView(

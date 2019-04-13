@@ -80,7 +80,7 @@
                 </div>
             </div>
             {% if is_granted ('ROLE_ABONENT') %}
-                <form method="post" action="{{ path('confirm_reservation') }}">
+                <form method="post" action="{{ path('reservation_info') }}">
                     <div class="row p-3">
                         <input type="hidden" name="id" value="{{ data.id }}">
                         <a class="left_button left_button-cancel" style="color: white" href="{{ path('home') }}">
@@ -100,7 +100,7 @@
                                 {{ 'Cancel'|trans }}
                             </a>
                             <button type="submit" class="submit_button submit_button-confirm">
-                                {{ 'Confirm Reservation'|trans }}
+                                {{ 'Confirm reservation'|trans }}
                             </button>
                         </div>
                     </form>
@@ -112,7 +112,7 @@
                                 {{ 'Cancel'|trans }}
                             </a>
                             <button type="submit"class="submit_button submit_button-confirm">
-                                {{ 'Confirm rezervation and make payment!'|trans }}
+                                {{ 'Confirm reservation'|trans }}
                             </button>
                         </div>
                     </form>

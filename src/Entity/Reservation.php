@@ -65,7 +65,7 @@ class Reservation
     /**
      * @ORM\Column(type="boolean")
      */
-    private $house;
+    private $house = false;
 
     /**
      * @ORM\Column(type="integer")
@@ -113,6 +113,22 @@ class Reservation
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $userId;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $housePrice = 0;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $fishingPrice = 0;
+
 
     public function getId(): ?int
     {
@@ -283,6 +299,42 @@ class Reservation
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    public function setUserId(int $userId): self
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    public function getHousePrice(): ?int
+    {
+        return $this->housePrice;
+    }
+
+    public function setHousePrice(?int $housePrice): Reservation
+    {
+        $this->housePrice = $housePrice;
+
+        return $this;
+    }
+
+    public function getFishingPrice()
+    {
+        return $this->fishingPrice;
+    }
+
+    public function setFishingPrice($fishingPrice)
+    {
+        $this->fishingPrice = $fishingPrice;
 
         return $this;
     }

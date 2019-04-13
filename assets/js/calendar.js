@@ -65,7 +65,7 @@ for (const sector in jj) {
             } else if (isInRange && dates[i].date === reservation.dateFrom && reservation.timeFrom === '07') {
                 dayInfo = STATUS_BUSY;
                 title = generateTitle(reservation);
-            } else if (isInRange && dates[i].date === reservation.dateFrom && reservation.timeFrom === '19' && Object.keys(jj[sector].reservation_dates).find(
+            } else if (isInRange && dates[i].date === reservation.dateFrom && reservation.timeFrom === '07' && Object.keys(jj[sector].reservation_dates).find(
                 function (v) {
                     if (isWithinRange(dates[i].date, jj[sector].reservation_dates[v].dateFrom, jj[sector].reservation_dates[v].dateTo) && jj[sector].reservation_dates[v].dateTo === reservation.dateFrom && jj[sector].reservation_dates[v].timeTo === "19") {
                         return true;

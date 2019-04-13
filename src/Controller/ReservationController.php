@@ -7,7 +7,7 @@ use App\Form\ReservationType;
 use App\Service\ReservationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -20,13 +20,9 @@ class ReservationController extends AbstractController
     const SECTOR_NUMBER = "Trečias Sektorius";
 
     /**
-     * @param Request $request
-     * @param ReservationService $reservationService
      * @Route("/reservation", name="new_reservation")
      * @IsGranted("ROLE_USER")
      * @throws
-     *
-     * @return Response
      */
     public function new(Request $request, ReservationService $reservationService)
     {
@@ -44,7 +40,7 @@ class ReservationController extends AbstractController
             $sectorNumber = $sector;
         }
 
-        $house = $sectorNumber === self::SECTOR_NUMBER ? true : false;
+
         try {
             $dateFrom = new \DateTime($request->query->get('date', 'now'));
         } catch (\Exception $e) {
@@ -53,20 +49,27 @@ class ReservationController extends AbstractController
 
         $reservation = new Reservation();
         $reservation->setDateFrom($dateFrom);
-        $reservation->setHouse($house);
+
+
 
         $availableDateTo = $this->getDoctrine()
             ->getRepository(Reservation::class)
             ->findAvailableDateTo($sectorNumber, $dateFrom);
 
+
         $isDateAvailableFrom7 = $this->getDoctrine()
             ->getRepository(Reservation::class)
-            ->isDateAvailableFrom7($sectorNumber, $dateFrom);
-
-        $form = $this->createForm(ReservationType::class, $reservation);
-        $form->handleRequest($request);
+            ->isAvailableDateFrom($sectorNumber, $dateFrom);
 
         $default_date_to = $dateFrom;
+
+        $form = $this->createForm(
+            ReservationType::class,
+            $reservation,
+            []
+        );
+
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $dateFrom = $form->getData()->getDateFrom()->setTime($form->get('timeFrom')->getData(), '00');
@@ -90,27 +93,28 @@ class ReservationController extends AbstractController
                             $totalHours = $reservationService->hoursTotal($dateFrom, $dateTo);
                             $fishersNumber = $reservation->getFishersNumber();
                             $fishingPrice = $reservationService->fishingPriceCalculation($fishersNumber, $totalHours);
-                            $housePrice = $reservationService->housePriceCalculation($totalHours);
-
-                            $totalPrice = $sectorNumber === self::SECTOR_NUMBER ?
-                                $reservationService->totalPriceCalculation($fishingPrice, $housePrice) : $fishingPrice;
-
+                            if ($sectorNumber === self::SECTOR_NUMBER) {
+                                $reservation->setHouse(true);
+                                $housePrice = $reservationService->housePriceCalculation($totalHours);
+                                $reservation->setHousePrice($housePrice);
+                                $totalPrice = $reservationService->totalPriceCalculation($fishingPrice, $housePrice);
+                            } else {
+                                $totalPrice = $fishingPrice;
+                            }
                             $reservation->setDateFrom($dateFrom);
                             $reservation->setDateTo($dateTo);
                             $reservation->setHours($totalHours);
+                            $reservation->setFishingPrice($fishingPrice);
                             $reservation->setAmount($totalPrice);
 
-                            $reservation->setUser($this->getUser());
+                            $this->get('session')->set('reservationObject', $reservation);
 
-                            $entityManager = $this->getDoctrine()->getManager();
-                            $entityManager->persist($reservation);
-                            $entityManager->flush();
+                            return $this->redirectToRoute('reservation_info',
+                                [
+                                    'request' => $request
+                                ]
+                            );
 
-                            return $this->render('reservation/confirm.html.twig', [
-                                'data' => $form->getData(),
-                                'fishingPrice' => $fishingPrice,
-                                'housePrice' => $housePrice,
-                            ]);
                         } else {
                             $this->addFlash(
                                 'warning',
@@ -141,23 +145,42 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/myReservations", name="my_reservations")
+     * @Route("/reservation_info", name="reservation_info")
      * @IsGranted("ROLE_USER")
-     * @throws
+     *
      */
-
-    public function myReservations(ReservationService $reservationService)
+    public function reservationInfo()
     {
-        $userReservations = $this->getDoctrine()
-            ->getRepository(Reservation::class)
-            ->findByUser($this->getUser()->getId());
 
-        $userData = $reservationService->createUserReservationDataArray($userReservations);
+        $formData = $this->get('session')->get('reservationObject');
+        $fishingPrice = $formData->getFishingPrice();
+        $housePrice = $formData->getHousePrice();
 
-        return $this->render('reservation/myReservations.html.twig', [
-            'userData' => $userData,
-            'username' => $this->getUser()->getName(),
-            'email' => $this->getUser()->getEmail()
+        return $this->render('reservation/confirm.html.twig', [
+            'data' => $formData,
+            'fishingPrice' => $fishingPrice,
+            'housePrice' => $housePrice,
+        ]);
+    }
+
+    /**
+     * @Route("/reservation/payment", name="payment_reservation")
+     * @IsGranted("ROLE_USER")
+     */
+    public function payment()
+    {
+        $reservation = $this->get('session')->get('reservationObject');
+        $reservation->setStatus(true);
+        $reservation->setUser($this->getUser());
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($reservation);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Reservation made successfully');
+
+        return $this->render('reservation/payment.html.twig', [
+            'reservation' => $reservation,
+            'userEmail' => $this->getUser()->getEmail()
         ]);
     }
 
@@ -172,8 +195,6 @@ class ReservationController extends AbstractController
             ->getRepository(Reservation::class)
             ->findOneByIdField($reservationId);
 
-        $reservation->setStatus(true);
-
         if ($this->isGranted('ROLE_ABONENT')) {
             $reservation->setPaymentStatus(true);
         }
@@ -183,7 +204,7 @@ class ReservationController extends AbstractController
         $entityManager->flush();
 
         $message = (new \Swift_Message($translator->trans('Reservation Confirmation')))
-            ->setFrom('bigfisheslt@gmail.com')
+            ->setFrom('bigfishes2019@gmail.com')
             ->setTo($this->getUser()->getEmail())
             ->setBody(
                 $this->renderView(
@@ -200,27 +221,26 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/reservation/payment", name="payment_reservation")
+     * @Route("/myReservations", name="my_reservations")
      * @IsGranted("ROLE_USER")
+     *
+     * @param ReservationService $reservationService
+     *
+     * @return ResponseAlias
      */
-    public function payment(Request $request)
+
+    public function myReservations(ReservationService $reservationService)
     {
-        $reservationId = $request->request->get('id');
-        $reservation = $this->getDoctrine()
+        $userReservations = $this->getDoctrine()
             ->getRepository(Reservation::class)
-            ->findOneByIdField($reservationId);
+            ->findByUser($this->getUser()->getId());
 
-        $reservation->setStatus(true);
+        $userData = $reservationService->createUserReservationDataArray($userReservations);
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($reservation);
-        $entityManager->flush();
-
-        $this->addFlash('success', 'Reservation made successfully');
-
-        return $this->render('reservation/payment.html.twig', [
-            'reservation' => $reservation,
-            'userEmail' => $this->getUser()->getEmail()
+        return $this->render('reservation/myReservations.html.twig', [
+            'userData' => $userData,
+            'username' => $this->getUser()->getName(),
+            'email' => $this->getUser()->getEmail()
         ]);
     }
 }

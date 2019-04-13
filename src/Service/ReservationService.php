@@ -93,7 +93,8 @@ class ReservationService
                 'sectorName' => $reservation->getsectorName(),
                 'amount' => $reservation->getamount(),
                 'hours' => $reservation->gethours(),
-                'reservation_name' => $reservation->getname()
+                'reservation_name' => $reservation->getname(),
+                'payment_status'=> $reservation->getPaymentStatus() ? 'Apmokėta' : 'Neapmokėta'
             ];
         }
         return $userReservationDataArray;
