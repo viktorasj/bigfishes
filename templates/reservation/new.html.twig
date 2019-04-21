@@ -109,7 +109,7 @@
             </div>
             <div class="row p-3">
                 <a class="left_button left_button-back" style="color: white" href="{{ path('home') }}">{{ 'Back'|trans }}</a>
-                <button class="submit_button submit_button-reservation" type="submit">{{ 'Continue reservation'|trans }}</button>
+                <button class="submit_button submit_button-reservation" type="submit">{{ 'Reserve'|trans }}</button>
             </div>
             {{ form_end(form) }}
         </div>
@@ -136,7 +136,7 @@
         let date_with_border = new Date('{{ default_date_to|date_modify("+1 day")|date('Y-m-d') }}');
         let time_from_BUSY = '{{ availableDateTo|date('H') }}';
         let date_from_BUSY = '{{ availableDateTo|date('Y-m-d') }}';
-        let is_date_available_from_8 = '{{ isDateAvailableFrom7 }}';
+        let is_date_available_from_7 = '{{ isDateAvailableFrom7 }}';
         if (date_with_border.getTime() == max_date.getTime()) {
             date_with_border = new Date('{{ default_date_to|date('Y-m-d') }}');
         }

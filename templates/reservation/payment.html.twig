@@ -26,12 +26,12 @@
                 <p>
                     <span>{{ 'If you have any questions, please contact us'|trans }}:</span>
                     <br>
-                    <span>email:</span> linas.kukulskis@gmail.com
+                    <span>email:</span> bigfisheslt@gmail.com
                     <br>
                     <span>Tel.</span> +370 666 77777
                 </p>
                 <form class="row pl-3 pr-3" method="post"
-                      action="{{ path('confirm_reservation') }}">
+                      action="{{ path('home') }}">
                     <input type="hidden" name="id" value="{{ reservation.id }}">
                     <button type="submit"
                             class="submit_button mb-2">{{ 'Complete the reservation'|trans }}

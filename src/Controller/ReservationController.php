@@ -24,7 +24,7 @@ class ReservationController extends AbstractController
      * @IsGranted("ROLE_USER")
      * @throws
      */
-    public function new(Request $request, ReservationService $reservationService)
+    public function newAction(Request $request, ReservationService $reservationService)
     {
         if ($request->query->get('sector')) {
             $sector = $request->query->get('sector');
@@ -107,13 +107,9 @@ class ReservationController extends AbstractController
                             $reservation->setFishingPrice($fishingPrice);
                             $reservation->setAmount($totalPrice);
 
-                            $this->get('session')->set('reservationObject', $reservation);
+                            $request->getSession()->set('reservationObject', $reservation);
 
-                            return $this->redirectToRoute('reservation_info',
-                                [
-                                    'request' => $request
-                                ]
-                            );
+                            return $this->redirectToRoute('reservation_confirmation');
 
                         } else {
                             $this->addFlash(
@@ -145,14 +141,13 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/reservation_info", name="reservation_info")
+     * @Route("/reservation_confirmation", name="reservation_confirmation")
      * @IsGranted("ROLE_USER")
      *
      */
-    public function reservationInfo()
+    public function reservationConfirmationAction(Request $request)
     {
-
-        $formData = $this->get('session')->get('reservationObject');
+        $formData = $request->getSession()->get('reservationObject');
         $fishingPrice = $formData->getFishingPrice();
         $housePrice = $formData->getHousePrice();
 
@@ -164,45 +159,20 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/reservation/payment", name="payment_reservation")
+     * @Route("/reservation/flush", name="flush_reservation")
      * @IsGranted("ROLE_USER")
      */
-    public function payment()
+    public function paymentAction(\Swift_Mailer $mailer, TranslatorInterface $translator, Request $request)
     {
-        $reservation = $this->get('session')->get('reservationObject');
+        $reservation = $request->getSession()->get('reservationObject');
+        if ($this->isGranted('ROLE_ABONENT') || $this->isGranted('ROLE_ADMIN')) {
+            $reservation->setPaymentStatus(true);
+        }
         $reservation->setStatus(true);
         $reservation->setUser($this->getUser());
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($reservation);
         $entityManager->flush();
-
-        $this->addFlash('success', 'Reservation made successfully');
-
-        return $this->render('reservation/payment.html.twig', [
-            'reservation' => $reservation,
-            'userEmail' => $this->getUser()->getEmail()
-        ]);
-    }
-
-    /**
-     * @Route("/reservation/confirm", name="confirm_reservation")
-     * @IsGranted("ROLE_USER")
-     */
-    public function sendEmail(\Swift_Mailer $mailer, TranslatorInterface $translator, Request $request)
-    {
-        $reservationId = $request->request->get('id');
-        $reservation = $this->getDoctrine()
-            ->getRepository(Reservation::class)
-            ->findOneByIdField($reservationId);
-
-        if ($this->isGranted('ROLE_ABONENT')) {
-            $reservation->setPaymentStatus(true);
-        }
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($reservation);
-        $entityManager->flush();
-
         $message = (new \Swift_Message($translator->trans('Reservation Confirmation')))
             ->setFrom('bigfishes2019@gmail.com')
             ->setTo($this->getUser()->getEmail())
@@ -216,8 +186,26 @@ class ReservationController extends AbstractController
                 'text/html'
             );
         $mailer->send($message);
+        $this->addFlash('success', 'Reservation made successfully');
 
-        return $this->redirectToRoute('home');
+        if ($this->isGranted('ROLE_ABONENT') || $this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->redirectToRoute('reservation_info');
+    }
+
+    /**
+     * @Route("/reservation_info", name="reservation_info")
+     * @IsGranted("ROLE_USER")
+     */
+    public function reservationInfoAction(Request $request)
+    {
+        $reservation = $request->getSession()->get('reservationObject');
+        return $this->render('reservation/payment.html.twig', [
+            'reservation' => $reservation,
+            'userEmail' => $this->getUser()->getEmail()
+        ]);
     }
 
     /**

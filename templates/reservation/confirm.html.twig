@@ -80,7 +80,7 @@
                 </div>
             </div>
             {% if is_granted ('ROLE_ABONENT') %}
-                <form method="post" action="{{ path('reservation_info') }}">
+                <form method="post" action="{{ path('confirm_reservation') }}">
                     <div class="row p-3">
                         <input type="hidden" name="id" value="{{ data.id }}">
                         <a class="left_button left_button-cancel" style="color: white" href="{{ path('home') }}">
@@ -93,26 +93,26 @@
                 </form>
             {% else %}
                 {% if data.dateTo < "now"|date_modify("+3 day") %}
-                    <form method="post" action="{{ path('confirm_reservation') }}">
+                    <form method="post" action="{{ path('flush_reservation') }}">
                         <div class="row p-3">
                             <input type="hidden" name="id" value="{{ data.id }}">
                             <a class="left_button left_button-cancel" style="color: white" href="{{ path('home') }}">
                                 {{ 'Cancel'|trans }}
                             </a>
                             <button type="submit" class="submit_button submit_button-confirm">
-                                {{ 'Confirm reservation'|trans }}
+                                {{ 'Confirm Reservation'|trans }}
                             </button>
                         </div>
                     </form>
                 {% else %}
-                    <form method="post" action="{{ path('payment_reservation') }}">
+                    <form method="post" action="{{ path('flush_reservation') }}">
                         <div class="row p-3">
                             <input type="hidden" name="id" value="{{ data.id }}">
                             <a class="left_button left_button-cancel" style="color: white" href="{{ path('home') }}">
                                 {{ 'Cancel'|trans }}
                             </a>
                             <button type="submit"class="submit_button submit_button-confirm">
-                                {{ 'Confirm reservation'|trans }}
+                                {{ 'Confirm rezervation and make payment!'|trans }}
                             </button>
                         </div>
                     </form>
