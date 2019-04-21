@@ -50,8 +50,6 @@ class ReservationController extends AbstractController
         $reservation = new Reservation();
         $reservation->setDateFrom($dateFrom);
 
-
-
         $availableDateTo = $this->getDoctrine()
             ->getRepository(Reservation::class)
             ->findAvailableDateTo($sectorNumber, $dateFrom);
@@ -173,6 +171,8 @@ class ReservationController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($reservation);
         $entityManager->flush();
+
+
         $message = (new \Swift_Message($translator->trans('Reservation Confirmation')))
             ->setFrom('bigfishes2019@gmail.com')
             ->setTo($this->getUser()->getEmail())
@@ -187,7 +187,6 @@ class ReservationController extends AbstractController
             );
         $mailer->send($message);
         $this->addFlash('success', 'Reservation made successfully');
-
         if ($this->isGranted('ROLE_ABONENT') || $this->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('home');
         }
@@ -216,7 +215,6 @@ class ReservationController extends AbstractController
      *
      * @return ResponseAlias
      */
-
     public function myReservations(ReservationService $reservationService)
     {
         $userReservations = $this->getDoctrine()
@@ -230,5 +228,24 @@ class ReservationController extends AbstractController
             'username' => $this->getUser()->getName(),
             'email' => $this->getUser()->getEmail()
         ]);
+    }
+
+    /**
+     * @Route("/delete_reservation/{id}", name="delete")
+     * @IsGranted("ROLE_USER")
+     */
+    public function removeReservationAction(int $id)
+    {
+        $user = $this->getUser();
+        $userId = $user->getId();
+        $entityManager = $this->getDoctrine()->getManager();
+        $reservation = $this->getDoctrine()
+            ->getRepository(Reservation::class)
+            ->findById($id);
+        if($reservation->getUserId() === $userId){
+            $entityManager->remove($reservation);
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('my_reservations');
     }
 }

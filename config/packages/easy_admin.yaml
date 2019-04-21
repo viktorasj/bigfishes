@@ -334,17 +334,17 @@ easy_admin:
           - FivethSector
           - SixthSector
           - SeventhSector
-      -
-        label: 'Ended Reservations'
-        icon: window-close
-        children:
-          - EndedReservations
-      -
-        label: 'Payments'
-        icon: euro
-        children:
-          - PaidReservations
-          - UnpaidReservations
+#      -
+#        label: 'Ended Reservations'
+#        icon: window-close
+#        children:
+#          - EndedReservations
+#      -
+#        label: 'Payments'
+#        icon: euro
+#        children:
+#          - PaidReservations
+#          - UnpaidReservations
       - { entity: 'User', label: 'Users', icon: 'user' }
       - { label: '' }
       - { label: 'Calendar of Reservations', route: 'home', icon: 'calendar' }
