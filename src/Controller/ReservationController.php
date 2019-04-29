@@ -82,7 +82,6 @@ class ReservationController extends AbstractController
                 $isAvailableDateTo = $this->getDoctrine()
                     ->getRepository(Reservation::class)
                     ->isAvailableDateTo($sectorNumber, $dateTo, $dateFrom);
-
                 if ($isAvailableDateTo) {
                     if ($isSectorValid) {
                         $reservation->setSectorName($sectorNumber);

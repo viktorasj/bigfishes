@@ -1,7 +1,10 @@
 {
   "build/js/calendar.js": "/build/js/calendar.js",
-  "build/js/my_reservations.js": "/build/js/my_reservations.js",
   "build/css/app.css": "/build/css/app.css",
   "build/js/reservations.js": "/build/js/reservations.js",
-  "build/js/app.js": "/build/js/app.js"
+  "build/js/my_reservations.js": "/build/js/my_reservations.js",
+  "build/js/app.js": "/build/js/app.js",
+  "build/images/background.jpg": "/build/images/background.f2e153a7.jpg",
+  "build/images/logo.png": "/build/images/logo.875fdc9f.png",
+  "build/images/undertop.png": "/build/images/undertop.4c1fbc6e.png"
 }

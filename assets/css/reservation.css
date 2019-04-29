@@ -9,7 +9,7 @@ input.reservation_reservation-name{
     padding: 10px;
 }
 
-input.datepicker_view {
+input.datepicker_view, input.datepicker_view_date_from, input.datepicker_view_date_to {
     display: inline-block!important;
     font-size: 14px!important;
     padding-top: 6px!important;

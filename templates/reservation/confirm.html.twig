@@ -80,7 +80,7 @@
                 </div>
             </div>
             {% if is_granted ('ROLE_ABONENT') %}
-                <form method="post" action="{{ path('confirm_reservation') }}">
+                <form method="post" action="{{ path('flush_reservation') }}">
                     <div class="row p-3">
                         <input type="hidden" name="id" value="{{ data.id }}">
                         <a class="left_button left_button-cancel" style="color: white" href="{{ path('home') }}">

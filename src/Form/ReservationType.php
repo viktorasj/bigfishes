@@ -35,6 +35,15 @@ class ReservationType extends AbstractType
                 ),
                 'data' => $this->security->getUser()->getName()
             ))
+            ->add('dateFrom', DateType::class, [
+                'required' => true,
+                'widget' => 'single_text',
+                'attr' => [
+                    'class' => 'js-datepicker',
+
+                ],
+                'html5' => false
+            ])
             ->add('timeFrom', ChoiceType::class, array(
                 'choices' => array('07:00' => '07', '19:00' => '19'),
                 'expanded' => true,
